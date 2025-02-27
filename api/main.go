@@ -437,9 +437,6 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("\n=== Full Request Information ===\n")
 	fmt.Printf("Request URL: %s\n", youReq.URL.String())
 	fmt.Printf("Request Headers:\n")
-	for key, values := range youReq.Header {
-		fmt.Printf("%s: %v\n", key, values)
-	}
 
 	// Set request headers
 	youReq.Header = http.Header{
@@ -447,6 +444,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		"Accept":        {"text/event-stream"},
 		"User-Agent":    {"Mozi1la/5.0 (compatible; YouMobile/1.0; iOS 18.3.1) Version/3.11.0 Build/2656"},
 		"Host":          {"you.com"},
+	}
+
+	for key, values := range youReq.Header {
+		fmt.Printf("%s: %v\n", key, values)
 	}
 
 	// Set cookies
