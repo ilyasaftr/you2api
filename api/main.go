@@ -222,13 +222,40 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate Authorization header
-	authHeader := r.Header.Get("Authorization")
-	if !strings.HasPrefix(authHeader, "Bearer ") {
-		http.Error(w, "Missing or invalid authorization header", http.StatusUnauthorized)
+	// Load allowed tokens from environment if configured
+	allowedTokens := strings.Split(os.Getenv("ALLOWED_TOKENS"), ",")
+	requireAuth := len(allowedTokens) > 0 && !(len(allowedTokens) == 1 && allowedTokens[0] == "")
+
+	// Validate Authorization header if auth is required
+	if requireAuth {
+		authHeader := r.Header.Get("Authorization")
+		if !strings.HasPrefix(authHeader, "Bearer ") {
+			http.Error(w, "Missing or invalid authorization header", http.StatusUnauthorized)
+			return
+		}
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+
+		// Check if token is in whitelist
+		validToken := false
+		for _, allowedToken := range allowedTokens {
+			if token == strings.TrimSpace(allowedToken) {
+				validToken = true
+				break
+			}
+		}
+
+		if !validToken {
+			http.Error(w, "Unauthorized token", http.StatusUnauthorized)
+			return
+		}
+	}
+
+	// Get real DS token from environment
+	dsToken := os.Getenv("DS_TOKEN")
+	if dsToken == "" {
+		http.Error(w, "DS token not configured", http.StatusInternalServerError)
 		return
 	}
-	dsToken := strings.TrimPrefix(authHeader, "Bearer ") // Extract DS token
 
 	// Parse OpenAI request body
 	var openAIReq OpenAIRequest
@@ -416,10 +443,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	// Set request headers
 	youReq.Header = http.Header{
-		"Cache-Control":              {"no-cache"},
-		"Accept":                     {"text/event-stream"},
-		"User-Agent":                 {"Mozi1la/5.0 (compatible; YouMobile/1.0; iOS 18.3.1) Version/3.11.0 Build/2656"},
-		"Host":                       {"you.com"},
+		"Cache-Control": {"no-cache"},
+		"Accept":        {"text/event-stream"},
+		"User-Agent":    {"Mozi1la/5.0 (compatible; YouMobile/1.0; iOS 18.3.1) Version/3.11.0 Build/2656"},
+		"Host":          {"you.com"},
 	}
 
 	// Set cookies

@@ -10,11 +10,11 @@ func TestRun(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name:    "正常运行",
+			name:    "Normal operation",
 			wantErr: false,
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if err := run(); (err != nil) != tt.wantErr {
@@ -22,4 +22,4 @@ func TestRun(t *testing.T) {
 			}
 		})
 	}
-} 
+}

@@ -7,6 +7,8 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - ALLOWED_TOKENS=your_internal_token # You can add multiple tokens separated by comma
+      - DS_TOKEN=your_ds_token # Your you.com token
       - PORT=8080
       - ENABLE_PROXY=false
       - PROXY_URL=
