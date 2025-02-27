@@ -1,41 +1,41 @@
-# 使用官方 Go 镜像作为构建环境
+# Use official Go image as build environment
 FROM golang:1.22-alpine AS builder
 
-# 设置工作目录
+# Set working directory
 WORKDIR /app
 
-# 复制 go.mod 和 go.sum
+# Copy go.mod and go.sum
 COPY go.mod go.sum ./
 
-# 下载依赖
+# Download dependencies
 RUN go mod download
 
-# 复制源代码
+# Copy source code
 COPY . .
 
-# 构建应用
+# Build application
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
-# 使用轻量级的 alpine 作为运行环境
+# Use lightweight alpine as runtime environment
 FROM alpine:latest
 
-# 安装 ca-certificates
+# Install ca-certificates
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/
 
-# 从构建阶段复制二进制文件
+# Copy binary from build stage
 COPY --from=builder /app/main .
 
-# 设置环境变量
+# Set environment variables
 ENV PORT=8080
 ENV ENABLE_PROXY=false
 ENV PROXY_URL=""
 ENV PROXY_TIMEOUT_MS=5000
 ENV LOG_LEVEL=info
 
-# 暴露端口
+# Expose port
 EXPOSE 8080
 
-# 运行应用
-CMD ["./main"] 
+# Run the application
+CMD ["./main"]

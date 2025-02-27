@@ -14,7 +14,7 @@ services:
       - LOG_LEVEL=info
     restart: unless-stopped
 
-  # 如果需要添加 Prometheus 监控
+  # If you need to add Prometheus monitoring
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -25,11 +25,11 @@ services:
     depends_on:
       - you2api
 
-  # 如果需要添加 Grafana 监控面板
+  # If you need to add Grafana monitoring dashboard
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
       - "3000:3000"
     depends_on:
-      - prometheus 
+      - prometheus

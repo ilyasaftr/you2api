@@ -8,7 +8,7 @@ var (
 	RequestCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "http_requests_total",
-			Help: "HTTP请求总数",
+			Help: "Total number of HTTP requests",
 		},
 		[]string{"method", "endpoint", "status"},
 	)
@@ -16,4 +16,4 @@ var (
 
 func Init() {
 	prometheus.MustRegister(RequestCounter)
-} 
+}
