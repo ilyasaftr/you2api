@@ -19,15 +19,15 @@ func main() {
 func run() error {
 	// Load configuration
 	config, err := config.Load()
-	if (err != nil) {
-		return fmt.Errorf("Failed to load config: %w", err)
+	if err != nil {
+		return fmt.Errorf("failed to load config: %w", err)
 	}
 
 	// If proxy is enabled
 	if config.Proxy.EnableProxy {
 		proxy, err := proxy.NewProxy(config.Proxy.ProxyURL, config.Proxy.ProxyTimeoutMS)
 		if err != nil {
-			return fmt.Errorf("Failed to initialize proxy: %w", err)
+			return fmt.Errorf("failed to initialize proxy: %w", err)
 		}
 
 		// Register proxy handler
@@ -42,7 +42,7 @@ func run() error {
 
 	// Start server
 	if err := http.ListenAndServe("0.0.0.0"+port, nil); err != nil {
-		return fmt.Errorf("Failed to start server: %w", err)
+		return fmt.Errorf("failed to start server: %w", err)
 	}
 	return nil
 }

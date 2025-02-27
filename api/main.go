@@ -276,7 +276,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	// Handle historical messages (excluding the last one)
 	for _, msg := range openAIReq.Messages[:len(openAIReq.Messages)-1] {
-		if msg.Role == "user" {
+		switch msg.Role {
+		case "user":
 			tokens, err := countTokens([]Message{msg})
 			if err != nil {
 				http.Error(w, "Failed to count tokens", http.StatusInternalServerError)
@@ -328,7 +329,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 					"answer":   "",
 				})
 			}
-		} else if msg.Role == "assistant" {
+		case "assistant":
 			// Only save the last assistant message
 			lastAssistantMessage = msg.Content
 		}
@@ -635,7 +636,7 @@ func getNonce(dsToken string) (*NonceResponse, error) {
 	// Read the full response content
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to read response: %v", err)
+		return nil, fmt.Errorf("failed to read response: %v", err)
 	}
 
 	// Directly use the response content as UUID
