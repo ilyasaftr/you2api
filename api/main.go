@@ -597,21 +597,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	// 设置请求头
 	youReq.Header = http.Header{
-		"sec-ch-ua-platform":         {"Windows"},
-		"Cache-Control":              {"no-cache"},
-		"sec-ch-ua":                  {`"Not(A:Brand";v="99", "Microsoft Edge";v="133", "Chromium";v="133"`},
-		"sec-ch-ua-bitness":          {"64"},
-		"sec-ch-ua-model":            {""},
-		"sec-ch-ua-mobile":           {"?0"},
-		"sec-ch-ua-arch":             {"x86"},
-		"sec-ch-ua-full-version":     {"133.0.3065.39"},
-		"Accept":                     {"text/event-stream"},
-		"User-Agent":                 {"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0"},
-		"sec-ch-ua-platform-version": {"19.0.0"},
-		"Sec-Fetch-Site":             {"same-origin"},
-		"Sec-Fetch-Mode":             {"cors"},
-		"Sec-Fetch-Dest":             {"empty"},
-		"Host":                       {"you.com"},
+		"Cache-Control": {"no-cache"},
+		"Accept":        {"text/event-stream"},
+		"User-Agent":    {"Mozi1la/5.0 (compatible; YouMobile/1.0; iOS 18.3.2) Version/3.12.0 Build/2827"},
+		"Host":          {"you.com"},
 	}
 
 	// 设置 Cookie
