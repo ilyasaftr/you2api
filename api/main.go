@@ -21,9 +21,6 @@ import (
 var agentModelIDs []string
 
 func init() {
-	// 初始化随机数生成器
-	rand.Seed(time.Now().UnixNano())
-
 	// 新增：初始化agent模型ID
 	initAgentModelIDs()
 }
@@ -323,7 +320,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(openAIReq.Messages)-1; i++ {
 		msg := openAIReq.Messages[i]
 
-		if msg.Role == "user" {
+		switch msg.Role {
+		case "user":
 			// 如果已经有问题和回答，添加到历史
 			if hasQuestion && hasAnswer {
 				chatHistory = append(chatHistory, ChatEntry{
@@ -343,7 +341,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 				currentQuestion = msg.Content
 				hasQuestion = true
 			}
-		} else if msg.Role == "assistant" {
+		case "assistant":
 			if hasQuestion {
 				// 如果有问题，设置回答
 				currentAnswer = msg.Content
